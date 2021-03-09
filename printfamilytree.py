@@ -25,7 +25,7 @@ class TextBlock:
             
         else:
             raise Exception("{}'s parent group has incorrect size".format(self.basePerson))
-    
+
 
         self.childTextBlocks = []
         self.children = self.basePerson.children
@@ -112,7 +112,7 @@ class TextBlock:
         return '{}: {}'.format(self.basePerson.name, str(self.children))
     
 
-    # Returns a tuple of strings which, when printed in sequence, show the family tree.
+    # Returns a tuple of strings which, when printed in sequence, show the family tree below basePerson
     # Each element of the tuple is a horizontal line of the family tree.
     def createBlock(self):
         
@@ -137,11 +137,10 @@ class TextBlock:
             
             missingWidth = max(parentWidth - len(tuples[0]), 0)                     # Width needed to add
 
-            leftPad = int(missingWidth / 2)
+            leftPad = int((missingWidth + 1)/ 2)
             rightPad = missingWidth - leftPad
             
             return tuple(' ' * leftPad + row + ' ' * rightPad for row in tuples)
-        
         
         # Creates tuple of blocks for children of basePerson
         childList = tuple(child.createBlock() for child in self.childTextBlocks)
@@ -170,11 +169,13 @@ class TextBlock:
                     lastInd = index 
                     
                 
-            offsetLeft = firstInd                                                   # Space in line at left before line
+            vertLineBool = (self.basePerson.children.size() == 1)                   # Whether basePerson has exactly 1 child
+                
+            offsetLeft = (firstInd - vertLineBool)                                  # Space in line at left before line
             lineLength = lastInd - firstInd                                         # Length of horizontal line
-            offsetRight = self.spaceBelowNeeded() - lastInd                         # Space in line at left before line
+            offsetRight = self.spaceBelowNeeded() - lastInd - vertLineBool          # Space in line at left before line
             
-            horizontalStem = ' ' * offsetLeft + '-' * lineLength + ' ' * offsetRight 
+            horizontalStem = ' ' * offsetLeft + '-' * lineLength + '|' * vertLineBool + ' ' * offsetRight
             
         else:
             horizontalStem = ' ' * self.spaceBelowNeeded()

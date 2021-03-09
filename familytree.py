@@ -75,7 +75,7 @@ class Person:
         if groupName in relationSet:
             setattr(self, groupName, group)
         else:
-            raise Exception("Invalid relation '{}', relation must be one of {}".format(relation, relationSet))
+            raise Exception("Invalid relation '{}', relation must be one of {}".format(groupName, relationSet))
     
     def getPartner(self):
         p1 = [partner for partner in self.partners if partner is not self]
